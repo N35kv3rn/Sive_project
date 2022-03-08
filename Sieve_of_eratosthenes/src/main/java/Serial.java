@@ -1,12 +1,5 @@
-import java.util.Arrays;
-
 public class Serial {
-    static boolean[] primeArray;
-
-    public static boolean[] getSerial(int size) {
-        primeArray = new boolean[size];
-        Arrays.fill(primeArray, true);
-
+    public static boolean[] getSerial(boolean[] primeArray) {
         for (int i = 2; i < Math.sqrt(primeArray.length); i++) {
             if(primeArray[i]) {
                 for(int j = i*i; j < primeArray.length; j+=i) {
@@ -14,7 +7,6 @@ public class Serial {
                 }
             }
         }
-
         return primeArray;
     }
 }
