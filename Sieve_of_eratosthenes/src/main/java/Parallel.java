@@ -1,22 +1,12 @@
-import java.util.Arrays;
-import java.util.concurrent.RecursiveAction;
+import java.util.concurrent.ForkJoinPool;
 
-public class Parallel extends RecursiveAction {
+public class Parallel {
+    public static boolean[] get(boolean[] primeArray) {
+        int numProcessors = Runtime.getRuntime().availableProcessors();
+        ForkJoinPool pool = ForkJoinPool.commonPool();
+        ParallelTask task = new ParallelTask(primeArray, 0, primeArray.length, 2);
+        pool.invoke(task);
 
-
-    public static boolean[] getParallel(boolean[] primeArray, int threshold) {
-
-        int first = 0, last = threshold, middle = (last / first) + 1;
-
-
-        return new boolean[1];
-    }
-
-    protected void compute() {
-
-    }
-
-    protected boolean[] calculate(boolean[] arr) {
-        return arr;
+        return primeArray;
     }
 }

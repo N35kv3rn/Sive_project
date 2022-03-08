@@ -11,12 +11,17 @@ public class Main {
 
         // TODO: Write sequential
 
-        boolean[] serialArray = Serial.getSerial(primeArray);
+        boolean[] serialArray = Serial.get(primeArray);
         debugPrint(serialArray);
+
+        System.out.println("");
+        System.out.println("");
+        System.out.println("-------------------------");
+        System.out.println("");
 
         // TODO: Write parallel
 
-        boolean[] parallelArray = Parallel.getParallel(primeArray, THRESHOLD);
+        boolean[] parallelArray = Parallel.get(primeArray);
         debugPrint(parallelArray);
 
     }
