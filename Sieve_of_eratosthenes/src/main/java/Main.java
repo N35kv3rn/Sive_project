@@ -1,7 +1,8 @@
 import java.util.Arrays;
+import java.util.concurrent.CyclicBarrier;
 
 public class Main {
-    private static final int SIZE = 10000;
+    private static final int SIZE = 46349;
     private static final int THRESHOLD = 500;
 
     public static void main(String[] args) {
@@ -22,7 +23,6 @@ public class Main {
         System.out.println("");
 
         // TODO: Write parallel
-
         boolean[] parallelArray = Parallel.get(primeArray2);
         debugPrint(parallelArray);
 

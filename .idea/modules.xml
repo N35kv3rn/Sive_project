@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/HPC_prosjekt_sieve.iml" filepath="$PROJECT_DIR$/.idea/HPC_prosjekt_sieve.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Sieve_of_eratosthenes/Sieve_of_eratosthenes.iml" filepath="$PROJECT_DIR$/Sieve_of_eratosthenes/Sieve_of_eratosthenes.iml" />
+    </modules>
+  </component>
+</project>

@@ -1,3 +1,4 @@
+import java.util.concurrent.CyclicBarrier;
 import java.util.concurrent.RecursiveAction;
 
 public class ParallelTask extends RecursiveAction {
@@ -6,6 +7,7 @@ public class ParallelTask extends RecursiveAction {
     int last;
     int threshold = 1000;
     int index;
+    private CyclicBarrier barrier;
 
 
     private final boolean[] primeArray;
@@ -14,7 +16,9 @@ public class ParallelTask extends RecursiveAction {
         this.first = first;
         this.last = last;
         this.index = index;
+        //barrier = new CyclicBarrier();
     }
+
 
 
     protected void compute() {
@@ -26,10 +30,12 @@ public class ParallelTask extends RecursiveAction {
                 ParallelTask t1 = new ParallelTask(primeArray, first, middle+1, index);
                 ParallelTask t2 = new ParallelTask(primeArray, middle+1, last, index);
                 invokeAll(t1,t2);
+
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
+
 
     }
 
@@ -37,6 +43,7 @@ public class ParallelTask extends RecursiveAction {
 
     protected boolean[] calculate(boolean[] primeArray) {
         try {
+            barrier.await();
             for (int i = index; i < last; i++) {
                 if(primeArray[i] && i*i < primeArray.length) {
                     for(int j = i*i; j < last; j+=i) {

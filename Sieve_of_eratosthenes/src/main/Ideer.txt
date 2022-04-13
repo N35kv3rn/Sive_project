@@ -1,0 +1,7 @@
+    // Size 8000
+    // 8000 / Runtime.getRuntime().availableProcessors() = 1000
+
+    // 1. P0 Root Kalkulerer neste index
+    // 2. P0-P8 utfører calculate() på sin del
+    // 3. Barrier.await(): venter til alle er ferdig med sin del
+    // 4. Gå til punkt 1.
