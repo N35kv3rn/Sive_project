@@ -2,82 +2,48 @@ package MPI;
 
 import java.util.concurrent.BrokenBarrierException;
 import java.util.concurrent.CyclicBarrier;
+import java.util.concurrent.ExecutorService;
 
 public class Parallel {
 
-    CyclicBarrier barrier;
-    int numOfProcessors;
-    int index;
-    boolean[] primeArray;
+    private static final int numThreads = Runtime.getRuntime().availableProcessors();
 
+    public static final CyclicBarrier barrier = new CyclicBarrier(numThreads + 1);
 
-    public Parallel(boolean[] primeArray, int index) {
-        this.numOfProcessors = Runtime.getRuntime().availableProcessors();
-        this.primeArray = primeArray;
-        this.index = index;
+    public static boolean[] get(boolean[] primeArray) {
+        try {
+            int partitionSize = primeArray.length / numThreads;
+            int modPartitionSize = primeArray.length % numThreads;
+            //Thread[] threads = new Thread[numThreads];
 
+            ExecutorService executor = java.util.concurrent.Executors.newFixedThreadPool(numThreads);
 
-        barrier = new CyclicBarrier(this.numOfProcessors, new Runnable() {
-            @Override
-            public void run() {
-
-            }
-        });
-
-        int partition = primeArray.length / numOfProcessors;
-
-        for (int i = 0; i < numOfProcessors; i++) {
-            new Thread(new Worker(primeArray, i, ))
-        }
-
-    }
-
-    class Worker implements Runnable {
-        int index, first, last;
-        boolean[] primeArray;
-        private Worker(boolean[] primeArray, int first, int last, int index) {
-            this.index = index;
-            this.first = first;
-            this.last = last;
-            this.primeArray = primeArray;
-        }
-        public void run() {
-            calculate(primeArray);
-
-            try {
-                barrier.await();
-            } catch (BrokenBarrierException e) {
-                e.printStackTrace();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-
-        boolean[] calculate(boolean[] primeArray) {
-            try {
-                for (int i = first; i < last; i++) {
-                    if(primeArray[i] && i*i < primeArray.length) {
-                        for(int j = index*index; j < last; j+=i) {
-                            primeArray[j] = false;
+            for (int i = 2; i < Math.sqrt(primeArray.length); i++) {
+                if(primeArray[i]) {
+                    for (int j = 0; j < numThreads; j++) {
+                        int start = j * partitionSize;
+                        int end = (j + 1) * partitionSize;
+                        if (j == numThreads - 1) {
+                            end += modPartitionSize;
                         }
+                        executor.execute(new Sieve(primeArray, start, end, i));
+                        //threads[j] = new Thread(new Sieve(primeArray, start, end, i));
+                        //threads[j].start();
                     }
+
+                barrier.await();
+                barrier.reset();
                 }
-            } catch (Exception e) {
-                e.printStackTrace();
             }
 
+            executor.shutdown();
 
-            return primeArray;
+        } catch (Exception e) {
+            System.out.println(e);
         }
 
-        public boolean[] get(boolean[] primeArray) {
 
-
-            return primeArray;
-        }
+        return primeArray;
     }
 
-
-
-
-    }
+}

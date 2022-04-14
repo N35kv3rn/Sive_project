@@ -1,5 +1,5 @@
+
 import java.util.Arrays;
-import java.util.concurrent.CyclicBarrier;
 
 public class Main {
     private static final int SIZE = 46349;
@@ -12,21 +12,26 @@ public class Main {
         Arrays.fill(primeArray2, true);
 
 
+        long startTime;
+        long endTime;
+
+
         // TODO: Write sequential
-
+        startTime = System.currentTimeMillis();
         boolean[] serialArray = Serial.get(primeArray);
-        debugPrint(serialArray);
-
-        System.out.println("");
-        System.out.println("");
-        System.out.println("-------------------------");
-        System.out.println("");
+        endTime = System.currentTimeMillis();
+        System.out.println("Serial time: " + (endTime - startTime));
 
         // TODO: Write parallel
+
+        startTime = System.currentTimeMillis();
         boolean[] parallelArray = Parallel.get(primeArray2);
-        debugPrint(parallelArray);
+        endTime = System.currentTimeMillis();
+        System.out.println("Parallel time: " + (endTime - startTime));
 
         System.out.println("\r\n\r\nEqual: " + Arrays.equals(serialArray, parallelArray));
+
+
 
     }
 
