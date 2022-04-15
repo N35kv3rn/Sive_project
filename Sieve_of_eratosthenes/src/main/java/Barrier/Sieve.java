@@ -1,50 +1,53 @@
 package Barrier;
 
+import java.util.Arrays;
+import java.util.concurrent.CyclicBarrier;
+
 public class Sieve implements Runnable {
+    private boolean[] primeArray;
     private int start;
     private int end;
+    private final CyclicBarrier barrier;
 
-    private boolean[] primeArray;
 
-    private int index;
-
-    public Sieve(boolean[] primeArray, int start, int end, int index) {
+    public Sieve(boolean[] primeArray, int start, int end, CyclicBarrier barrier) {
+        this.primeArray = primeArray;
         this.start = start;
         this.end = end;
-        this.primeArray = primeArray;
-        this.index = index;
+        this.barrier = barrier;
+
     }
 
     @Override
     public void run() {
         try {
-            if(end % index == 0 && end < primeArray.length) {
-                primeArray[end] = false;
-            }
+            for (int i = 2; i < Math.sqrt(primeArray.length); i++) {
+                if(end % i == 0 && end < primeArray.length) {
+                    primeArray[end] = false;
+                }
 
-            if(start%index != 0) {
-                while(true) {
-                    if(start%index == 0) {
-                        break;
+                if (start % i != 0) {
+                    while(true) {
+                        if(start % i == 0) {
+                            break;
+                        }
+                        start--;
                     }
-                    start--;
+                }
+
+                if(primeArray[i]) {
+                    for (int j = start + i; j < end; j += i) {
+                        if(j==2 || j == i) {
+                            continue;
+                        }
+                        primeArray[j] = false;
+                    }
                 }
             }
-
-            for (int j = start + index; j < end; j += index) {
-                if(j <= 2) {
-                    continue;
-                }
-                if(j == index) {
-                    primeArray[j] = true;
-                    continue;
-                }
-                primeArray[j] = false;
-            }
-
-            Parallel.barrier.await();
+            barrier.await();
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
+
 }

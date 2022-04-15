@@ -4,7 +4,7 @@ import java.util.Arrays;
 
 public class Main {
 
-    private static final int SIZE = 765765876;
+    private static final int SIZE = 960_000_000; // 10^9 = 1_000_000_000
 
     public static void main(String[] args) {
         boolean[] primeArray = new boolean[SIZE];
@@ -15,20 +15,20 @@ public class Main {
         long startTime;
         long endTime;
 
-
+        System.out.println("SIZE: " + SIZE);
         // TODO: Write sequential
+        System.out.println("Sequential");
         startTime = System.currentTimeMillis();
-        boolean[] serialArray = Serial.get(primeArray);
+        boolean[] serialArray = new Serial(primeArray).getPrimeArray();
         endTime = System.currentTimeMillis();
         System.out.println("Serial time: " + (endTime - startTime)/ 1000.0 + " seconds");
 
         // TODO: Write parallel
-
+        System.out.println("Parallel");
         startTime = System.currentTimeMillis();
-        boolean[] parallelArray = Parallel.get(primeArray2);
+        boolean[] parallelArray = new Parallel(primeArray2).getPrimeArray();
         endTime = System.currentTimeMillis();
         System.out.println("Parallel time: " + (endTime - startTime) / 1000.0 + " seconds");
-        System.out.println("");
 
         for (int i = 0; i < SIZE; i++) {
             if(parallelArray[i] != serialArray[i]) {
@@ -36,8 +36,6 @@ public class Main {
             }
         }
 
-        System.out.println("\r\n\r\nEqual: " + Arrays.equals(serialArray, parallelArray));
-
+        System.out.println("\r\nEqual: " + Arrays.equals(serialArray, parallelArray));
     }
-
 }
