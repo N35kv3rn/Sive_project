@@ -1,4 +1,4 @@
-package MPI;
+package Barrier;
 
 public class Serial {
     public static boolean[] get(boolean[] primeArray) {

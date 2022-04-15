@@ -1,6 +1,5 @@
-package MPI;
+package Barrier;
 
-import java.util.concurrent.BrokenBarrierException;
 import java.util.concurrent.CyclicBarrier;
 import java.util.concurrent.ExecutorService;
 
@@ -22,10 +21,7 @@ public class Parallel {
                 if(primeArray[i]) {
                     for (int j = 0; j < numThreads; j++) {
                         int start = j * partitionSize;
-                        int end = (j + 1) * partitionSize;
-                        if (j == numThreads - 1) {
-                            end += modPartitionSize;
-                        }
+                        int end = (j + 1) * partitionSize + modPartitionSize;
                         executor.execute(new Sieve(primeArray, start, end, i));
                         //threads[j] = new Thread(new Sieve(primeArray, start, end, i));
                         //threads[j].start();

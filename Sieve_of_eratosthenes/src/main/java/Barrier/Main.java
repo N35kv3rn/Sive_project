@@ -1,10 +1,10 @@
-package MPI;
+package Barrier;
 
 import java.util.Arrays;
 
 public class Main {
 
-    private static final int SIZE = 876533765;
+    private static final int SIZE = 765765876;
 
     public static void main(String[] args) {
         boolean[] primeArray = new boolean[SIZE];
@@ -20,14 +20,14 @@ public class Main {
         startTime = System.currentTimeMillis();
         boolean[] serialArray = Serial.get(primeArray);
         endTime = System.currentTimeMillis();
-        System.out.println("Serial time: " + (endTime - startTime));
+        System.out.println("Serial time: " + (endTime - startTime)/ 1000.0 + " seconds");
 
         // TODO: Write parallel
 
         startTime = System.currentTimeMillis();
         boolean[] parallelArray = Parallel.get(primeArray2);
         endTime = System.currentTimeMillis();
-        System.out.println("Parallel time: " + (endTime - startTime));
+        System.out.println("Parallel time: " + (endTime - startTime) / 1000.0 + " seconds");
         System.out.println("");
 
         for (int i = 0; i < SIZE; i++) {
