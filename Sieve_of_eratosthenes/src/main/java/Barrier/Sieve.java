@@ -5,17 +5,18 @@ import java.util.concurrent.CyclicBarrier;
 
 public class Sieve implements Runnable {
     private boolean[] primeArray;
+    private boolean[] localPrimeArray;
     private int start;
     private int end;
     private final CyclicBarrier barrier;
 
 
-    public Sieve(boolean[] primeArray, int start, int end, CyclicBarrier barrier) {
+    public Sieve(boolean[] primeArray, boolean[] localPrimeArray, int start, int end, CyclicBarrier barrier) {
         this.primeArray = primeArray;
+        this.localPrimeArray = localPrimeArray;
         this.start = start;
         this.end = end;
         this.barrier = barrier;
-
     }
 
     @Override
@@ -26,6 +27,7 @@ public class Sieve implements Runnable {
                     primeArray[end] = false;
                 }
 
+
                 if (start % i != 0) {
                     while(true) {
                         if(start % i == 0) {
@@ -35,7 +37,7 @@ public class Sieve implements Runnable {
                     }
                 }
 
-                if(primeArray[i]) {
+                if(localPrimeArray[i]) {
                     for (int j = start + i; j < end; j += i) {
                         if(j==2 || j == i) {
                             continue;

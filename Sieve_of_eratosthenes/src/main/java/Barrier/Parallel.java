@@ -1,5 +1,6 @@
 package Barrier;
 
+import java.util.Arrays;
 import java.util.concurrent.CyclicBarrier;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -15,15 +16,22 @@ public class Parallel {
         try {
             int partitionSize = primeArray.length / numThreads;
             int modPartitionSize = primeArray.length % numThreads;
-            Thread[] threads = new Thread[numThreads];
+
+            boolean[] localPrimeArray = new boolean[primeArray.length];
+            Arrays.fill(localPrimeArray, true);
+
+            for (int i = 3; i < Math.sqrt(localPrimeArray.length); i++) {
+                if (localPrimeArray[i]) {
+                    for (int j = i * i; j < Math.sqrt(localPrimeArray.length); j += i) {
+                        localPrimeArray[j] = false;
+                    }
+                }
+            }
 
             for (int j = 0; j < numThreads; j++) {
                 int start = j * partitionSize;
                 int end = (j + 1) * partitionSize + modPartitionSize;
-
-                //threads[j] = new Thread(new Sieve(primeArray, start, end, barrier));
-                //threads[j].start();
-                executor.execute(new Sieve(primeArray, start, end, barrier));
+                executor.execute(new Sieve(primeArray, localPrimeArray, start, end, barrier));
             }
 
             executor.shutdown();
