@@ -4,12 +4,8 @@ import java.util.Arrays;
 
 public class Main {
 
-    private static final int SIZE = 1_000_000; // N
+    private static final int SIZE = 1_000_000_000; // N
     private static final int NUMBER_OF_PROCESSORS = Runtime.getRuntime().availableProcessors();
-
-    // size = 10^6, 10^7, 10^8, 10^9
-    // number of processors = 1, 2, 4, 8
-
 
     public static void main(String[] args) {
         boolean[] primeArray = new boolean[SIZE];
