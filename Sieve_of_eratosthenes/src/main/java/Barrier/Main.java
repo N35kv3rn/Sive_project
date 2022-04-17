@@ -4,7 +4,7 @@ import java.util.Arrays;
 
 public class Main {
 
-    private static final int SIZE = 1_000_000_000; // 10^9 = 1_000_000_000
+    private static final int SIZE = 500_000_000; // 10^9 = 1_000_000_000
 
     public static void main(String[] args) {
         boolean[] primeArray = new boolean[SIZE];

@@ -4,19 +4,32 @@ import java.util.Arrays;
 import java.util.concurrent.CyclicBarrier;
 
 public class Sieve implements Runnable {
+    private final boolean[] localPrimeArray;
     private boolean[] primeArray;
-    private boolean[] localPrimeArray;
     private int start;
     private int end;
     private final CyclicBarrier barrier;
 
 
-    public Sieve(boolean[] primeArray, boolean[] localPrimeArray, int start, int end, CyclicBarrier barrier) {
+    public Sieve(boolean[] primeArray, int start, int end, CyclicBarrier barrier) {
         this.primeArray = primeArray;
-        this.localPrimeArray = localPrimeArray;
+
         this.start = start;
         this.end = end;
         this.barrier = barrier;
+
+        int lengthSquared = (int)Math.sqrt(primeArray.length);
+        boolean[] localPrimeArray = new boolean[lengthSquared + 1];
+        Arrays.fill(localPrimeArray, true);
+
+        for (int i = 3; i < lengthSquared; i++) {
+            if (localPrimeArray[i]) {
+                for (int j = i * i; j < lengthSquared; j += i) {
+                    localPrimeArray[j] = false;
+                }
+            }
+        }
+        this.localPrimeArray = localPrimeArray;
     }
 
     @Override
@@ -27,7 +40,6 @@ public class Sieve implements Runnable {
                     primeArray[end] = false;
                 }
 
-
                 if (start % i != 0) {
                     while(true) {
                         if(start % i == 0) {
@@ -37,7 +49,7 @@ public class Sieve implements Runnable {
                     }
                 }
 
-                if(localPrimeArray[i]) {
+                if(localPrimeArray[i] || primeArray[i]) {
                     for (int j = start + i; j < end; j += i) {
                         if(j==2 || j == i) {
                             continue;
