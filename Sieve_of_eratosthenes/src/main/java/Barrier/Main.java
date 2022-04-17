@@ -36,18 +36,9 @@ public class Main {
         endTimeParallel = System.currentTimeMillis();
         System.out.println("Parallel finished");
         runTimeParallel = endTimeParallel - startTimeParallel;
-
-
-
+        
         double speedup = (double) runTimeSerial/ runTimeParallel;
         double efficiency = speedup / NUMBER_OF_PROCESSORS;
-
-
-        for (int i = 0; i < SIZE; i++) {
-            if(serialArray[i] != parallelArray[i]) {
-                System.out.println("Error at index: " + i);
-            }
-        }
 
         // Prints results
         System.out.println("\n\n*** Serial ***");
