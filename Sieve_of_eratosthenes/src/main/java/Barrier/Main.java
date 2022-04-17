@@ -28,15 +28,16 @@ public class Main {
         boolean[] serialArray = new Serial(primeArray).getPrimeArray();
         endTimeSerial = System.currentTimeMillis();
         System.out.println("Serial finished");
-        runTimeSerial = endTimeSerial - startTimeSerial;
 
         System.out.println("Parallel running...");
         startTimeParallel = System.currentTimeMillis();
         boolean[] parallelArray = new Parallel(primeArray2, NUMBER_OF_PROCESSORS).getPrimeArray();
         endTimeParallel = System.currentTimeMillis();
         System.out.println("Parallel finished");
+
+        // Running time, speedup, efficiency
+        runTimeSerial = endTimeSerial - startTimeSerial;
         runTimeParallel = endTimeParallel - startTimeParallel;
-        
         double speedup = (double) runTimeSerial/ runTimeParallel;
         double efficiency = speedup / NUMBER_OF_PROCESSORS;
 
