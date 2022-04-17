@@ -67,7 +67,7 @@ public class Sieve implements Runnable {
 
                 if(localPrimeArray[i] || primeArray[i]) {
                     for (int j = start + i; j < end; j += i) {
-                        if(j==2 || j == i) {
+                        if(j == i || j % 2 == 0) {
                             continue;
                         }
                         primeArray[j] = false;
