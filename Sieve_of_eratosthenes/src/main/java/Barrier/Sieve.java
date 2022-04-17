@@ -18,6 +18,7 @@ public class Sieve implements Runnable {
         this.end = end;
         this.barrier = barrier;
 
+        // Lokalt array med primtall til roten av array lengden
         int lengthSquared = (int)Math.sqrt(primeArray.length);
         boolean[] localPrimeArray = new boolean[lengthSquared + 1];
         Arrays.fill(localPrimeArray, true);
@@ -26,6 +27,7 @@ public class Sieve implements Runnable {
             if (localPrimeArray[i]) {
                 for (int j = i * i; j < lengthSquared; j += i) {
                     localPrimeArray[j] = false;
+                    primeArray[j] = false;
                 }
             }
         }
@@ -35,11 +37,25 @@ public class Sieve implements Runnable {
     @Override
     public void run() {
         try {
-            for (int i = 2; i < Math.sqrt(primeArray.length); i++) {
+            // Sjekker om vi starter på et oddetall, og setter start til et partall om vi gjør det.
+            if (start % 2 != 0) {
+                start--;
+            }
+            // Setter alle 2er til false
+            for (int i = start + 2; i < end; i+=2) {
+                if(i == 2) {
+                    continue;
+                }
+                primeArray[i] = false;
+            }
+
+            // Setter alle ikke primtall til false fra 3
+            for (int i = 3; i < Math.sqrt(primeArray.length); i++) {
+                // TODO: Skrive om logikken her.
                 if(end % i == 0 && end < primeArray.length) {
                     primeArray[end] = false;
                 }
-
+                // TODO: Skrive om logikken her. Tror denne løkka haler ut tiden.
                 if (start % i != 0) {
                     while(true) {
                         if(start % i == 0) {
