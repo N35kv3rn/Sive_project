@@ -8,16 +8,16 @@ import java.util.concurrent.TimeUnit;
 
 public class Parallel {
     private boolean[] primeArray;
-    private static final int numThreads = Runtime.getRuntime().availableProcessors();
-    public static final CyclicBarrier barrier = new CyclicBarrier(numThreads + 1);
-    private static ExecutorService executor = Executors.newFixedThreadPool(numThreads);
+    public static CyclicBarrier barrier;
 
-    public Parallel(boolean[] primeArray) {
+    public Parallel(boolean[] primeArray, int numThreads) {
+
+        barrier = new CyclicBarrier(numThreads + 1);
+        ExecutorService executor = Executors.newFixedThreadPool(numThreads);
+
         try {
             int partitionSize = primeArray.length / numThreads;
             int modPartitionSize = primeArray.length % numThreads;
-
-
 
             for (int j = 0; j < numThreads; j++) {
                 int start = j * partitionSize;
@@ -26,6 +26,7 @@ public class Parallel {
             }
 
             executor.shutdown();
+            // Wait for all threads to finish
             barrier.await();
             this.primeArray = primeArray;
         } catch (Exception e) {

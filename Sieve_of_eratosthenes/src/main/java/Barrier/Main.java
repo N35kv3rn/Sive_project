@@ -4,7 +4,12 @@ import java.util.Arrays;
 
 public class Main {
 
-    private static final int SIZE = 1_000_000_000; // 10^9 = 1_000_000_000
+    private static final int SIZE = 1_000_000; // N
+    private static final int NUMBER_OF_PROCESSORS = Runtime.getRuntime().availableProcessors();
+
+    // size = 10^6, 10^7, 10^8, 10^9
+    // number of processors = 1, 2, 4, 8
+
 
     public static void main(String[] args) {
         boolean[] primeArray = new boolean[SIZE];
@@ -12,30 +17,48 @@ public class Main {
         Arrays.fill(primeArray, true);
         Arrays.fill(primeArray2, true);
 
-        long startTime;
-        long endTime;
+        long startTimeSerial, endTimeSerial, startTimeParallel, endTimeParallel, runTimeSerial, runTimeParallel;
 
-        System.out.println("SIZE: " + SIZE);
-        // TODO: Write sequential
-        System.out.println("Sequential");
-        startTime = System.currentTimeMillis();
+        System.out.printf("\nSIZE: %,d\n",SIZE);
+        System.out.println("NUMBER OF PROCESSORS: " + NUMBER_OF_PROCESSORS);
+        System.out.println("---------------------\n");
+
+        System.out.println("Serial running...");
+        startTimeSerial = System.currentTimeMillis();
         boolean[] serialArray = new Serial(primeArray).getPrimeArray();
-        endTime = System.currentTimeMillis();
-        System.out.println("Serial time: " + (endTime - startTime)/ 1000.0 + " seconds");
+        endTimeSerial = System.currentTimeMillis();
+        System.out.println("Serial finished");
+        runTimeSerial = endTimeSerial - startTimeSerial;
 
-        // TODO: Write parallel
-        System.out.println("Parallel");
-        startTime = System.currentTimeMillis();
-        boolean[] parallelArray = new Parallel(primeArray2).getPrimeArray();
-        endTime = System.currentTimeMillis();
-        System.out.println("Parallel time: " + (endTime - startTime) / 1000.0 + " seconds");
+        System.out.println("Parallel running...");
+        startTimeParallel = System.currentTimeMillis();
+        boolean[] parallelArray = new Parallel(primeArray2, NUMBER_OF_PROCESSORS).getPrimeArray();
+        endTimeParallel = System.currentTimeMillis();
+        System.out.println("Parallel finished");
+        runTimeParallel = endTimeParallel - startTimeParallel;
+
+
+
+        double speedup = (double) runTimeSerial/ runTimeParallel;
+        double efficiency = speedup / NUMBER_OF_PROCESSORS;
+
 
         for (int i = 0; i < SIZE; i++) {
-            if(parallelArray[i] != serialArray[i]) {
-                System.out.println("Error at index " + i);
+            if(serialArray[i] != parallelArray[i]) {
+                System.out.println("Error at index: " + i);
             }
         }
 
-        System.out.println("\r\nEqual: " + Arrays.equals(serialArray, parallelArray));
+        // Prints results
+        System.out.println("\n\n*** Serial ***");
+        System.out.println("Running time: " + (runTimeSerial)/ 1000.0 + " seconds");
+        System.out.println("---------------------\n");
+        System.out.println("*** Parallel ***");
+        System.out.println("Running time: " + (runTimeParallel) / 1000.0 + " seconds");
+        System.out.println("---------------------\n");
+        System.out.println("Speedup: " + speedup);
+        System.out.println("Efficiency: " + efficiency);
+
+        System.out.println("\nArrays are equal: " + Arrays.equals(serialArray, parallelArray));
     }
 }
